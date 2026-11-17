@@ -1,0 +1,27 @@
+name: Descompactar Projeto
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  unzip:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Baixar repositório
+        uses: actions/checkout@v4
+
+      - name: Extrair ZIP e limpar arquivos internos
+        run: |
+          unzip -o "grok-workspace-2.zip"
+          rm -f "grok-workspace-2.zip"
+          rm -rf .grok attachments
+
+      - name: Salvar arquivos extraídos no repositório
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add -A
+          git commit -m "Extrair código do aplicativo"
+          git push
